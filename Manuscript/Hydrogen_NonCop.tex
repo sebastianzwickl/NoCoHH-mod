@@ -12,7 +12,6 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{setspace}
-%\modulolinenumbers[1]
 \journal{International Journal of Hydrogen Energy}
 \bibliographystyle{elsarticle-num}
 \setlength\parindent{0em}
@@ -36,7 +35,7 @@
 
 
 \begin{abstract}
-The core objective of this paper is to investigate a possible future business case for green hydrogen production from hydropower. In particular, the main research question is to find the trade-offs for a run-of-river hydropower plant owner between the currently prevailing business model of wholesale electricity trading and, alternatively, production of green hydrogen. Hence, a bi-level optimization framework (open-source) between a hydropower plant owner (H\textsubscript{2} producer) and a transportation firm (H\textsubscript{2} consumer) is developed. Thereby, the hydropower plant owner acts strategically as the leader in this game and sets the price of green hydrogen. The transportation firm aims for an optimal and cost-minimized coverage of its energy demand and thus chooses between conventional fuels and green hydrogen. The empirical scaling of the numerical example describes Central Western European wholesale electricity market settings. The results indicate that the current market environment and price setup do not allow for profitable green hydrogen production as yet. However, an increasing CO\textsubscript{2} price as the key determining parameter leads to improved competitiveness and expected profitability of the business case studied in this work. In the numerical example examined, a CO\textsubscript{2} price above \SI{245}{EUR \per \tonne} triggers profitability. If decarbonization of the energy systems (in Europe) and the \SI{1.5}{\degreeCelsius} climate targets are taken seriously in policy and decision making, this CO\textsubscript{2} price level can be achieved rather quickly. Future work may address, among others, the following aspects: a more detailed representation of the hydropower plant resource allocation mechanism in the modeling framework, consideration of investment costs of the agents in the objective function, or investigation of the impact on hydrogen production from hydropower in a predominantly renewable energy-based power plant portfolio, and thus regular predatory competition in the (daily) dispatch in periods of favorable renewable resource conditions. 
+The core objective of this paper is to investigate a possible future business case for green hydrogen production from hydropower. In particular, the main research question is to find the trade-offs for a run-of-river hydropower plant owner between the currently prevailing business model of wholesale electricity trading and, alternatively, production of green hydrogen. Hence, a bi-level optimization framework (open-source) between a hydropower plant owner (H\textsubscript{2} producer) and a transportation firm (H\textsubscript{2} consumer) is developed. Thereby, the hydropower plant owner acts strategically as the leader in this game and sets the price of green hydrogen. The transportation firm aims for an optimal and cost-minimized coverage of its energy demand and thus chooses between conventional fuels and green hydrogen. The empirical scaling of the numerical example describes Central Western European wholesale electricity market settings. The results indicate that the current market environment and price setup do not allow for profitable green hydrogen production as yet. However, an increasing CO\textsubscript{2} price as the key determining parameter leads to improved competitiveness and expected profitability of the business case studied in this work. In the numerical example examined, a CO\textsubscript{2} price above \SI{245}{EUR \per \tonne} triggers profitability. If decarbonization of the energy systems (in Europe) and the \SI{1.5}{\degreeCelsius} climate targets are taken seriously in policy and decision making, this CO\textsubscript{2} price level can be achieved rather quickly.
 \end{abstract}
 
 
@@ -45,8 +44,51 @@ Green hydrogen, Hydropower, Non-cooperative game, Open-Source, Business case, Re
 \end{keyword}
 
 \end{frontmatter}
+\section*{Nomenclature}
+\begin{center}
+	\renewcommand{\arraystretch}{1.1}
+	\centering
+	\small
+	\begin{tabular}{lm{8cm}r}
+		Type & Description & Unit\\
+		\hline
+		Set and index & & \\
+		\hline
+		{$t \in \mathcal{T}=\{1,\ldots,T\}$} & Set of time periods per year, index by $t$\\
+		\hline
+		Decision variables\\
+		\hline
+		{$q_{t}^{con}$} & Quantity of conventional fuels & \SI{}{\litre}\\
+		{$q_{t}^{H_2}$} & Quantity of hydrogen & \SI{}{MWh}\\
+		{$q_{t}^{CO_2}$} & Quantity of $CO_2$ emissions & \SI{}{tCO_2}\\
+		{$q_{t}^{spot}$} & Quantity of electricity sold at the day-ahead spot market & \SI{}{MWh}\\
+		{$q_{t}^{future}$} & Quantity of the future electricity contract & \SI{}{MWh}\\
+		{$q_{t}^{Curtail}$} & Quantity of curtailment & \SI{}{MWh}\\
+		{$p_{t}^{H_2}$} & Price of hydrogen & \SI{}{EUR \per MWh}\\
+		\hline
+		Dual variables\\
+		{$\lambda_{t}^{load}$} &Dual variable of load constraint & \SI{}{EUR\per MWh}\\
+		{$\lambda_{t}^{CO_2}$} & Dual variable of emission constraint & \SI{}{EUR \per tCO_2}\\
+		{$\mu_{t}^{con}$} & Dual variable of $q_{t}^{con}$ & \SI{}{EUR\per MWh}\\
+		{$\mu_{t}^{H_2}$} & Dual variable of $q_{t}^{H_2}$ & \SI{}{EUR\per MWh}\\
+		{$\mu_{t}^{CO_2}$} & Dual variable of $q_{t}^{CO_2}$ & \SI{}{EUR\per tCO_2}\\
+		\hline
+		Parameters\\
+		\hline
+		{$p_{t}^{con}$} & Price of conventional fuels & \SI{}{EUR \per MWh}\\
+		{$p_{t}^{CO_2}$} & Price of $CO_2$ emissions & \SI{}{EUR \per tCO_2}\\
+		{$\alpha^{con}$} & Emission factor of conventional fuels& \SI{}{tCO_2 \per MWh}\\
+		{$\beta^{con}$} & Energy density factor of conventional fuels & \SI{}{MWh \per \litre}\\
+		{$q_{t}^{load}$} & Quantity of demand & \SI{}{MWh}\\
+		{$p_{t}^{spot}$} & Day-ahead spot market price & \SI{}{EUR\per MWh}\\
+		{$p_{t}^{future}$} & Future electricity contract price & \SI{}{EUR\per MWh}\\
+		{$q_{t}^{gen}$} & Electricity generation & \SI{}{MWh}\\
+		{$\tilde{q}_{t}^{base}$} & Constant electricity generation band (future)& \SI{}{MWh}\\
+		{$\eta^{H_2}$} & Efficiency of the hydrogen	production.& \SI{}{1}\\	
+		\hline
+	\end{tabular}
+\end{center}
 
-\vspace{0.5cm}
 \section{Introduction}
 It is indisputable that hydrogen can play a pivotal role in transforming the existing energy systems towards sustainable ones dominated by renewable energy resources \cite{dunn2002hydrogen}. Two reasons are the main drivers for this ambitious perspective. On the one hand, hydrogen offers the opportunity to decarbonize the provision of numerous energy services and sectors \cite{midilli2008hydrogen}. On the other hand, it also adds additional integrated flexibility options, which can be used cross-sectoral and system-overarching \cite{kueppers2021decarbonization}. Implementing flexibility options is particularly inevitable in light of integrating sharply increasing shares of variable renewable energy generation \cite{kroniger2014hydrogen}.\vspace{0.3cm}
 
