@@ -142,3 +142,5 @@ dmypy.json
 *.bbl
 *.blg
 
+# exclude paper submission folder
+paper/
